@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dojos & Ninjas</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ninja/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <h1 class="mb-3">Welcome to Dojos & Ninjas</h1>
+            <div class="col">
+                <h2>Add a Dojo!</h2>
+                <form method="POST" action="{%url 'add_dojo'%}">
+                    {% csrf_token %}
+                        <label for="Name" class="form-label">Name: </label>
+                        <input type="text" class="form-control" id="dojo_name" name="dojo_name">
+                        <label for="City" class="form-label">City: </label>
+                        <input type="text" class="form-control" id="dojo_city" name="dojo_city">
+                        <label for="State" class="form-label">State: </label>
+                        <input type="text" class="form-control" id="dojo_state" name="dojo_state">
+                        <button type="submit" class="btn btn-dark mt-2">Add Dojo</button>
+                </form>
+            </div>
+            <div class="col">
+                <h2>Add a Ninja!</h2>
+                <form method="POST" action="{%url 'add_ninja'%}">
+                    {% csrf_token %}
+                    <label for="Name" class="form-label">First Name: </label>
+                    <input type="text" class="form-control" id="first_name" name="ninja_fname">
+                    <label for="City" class="form-label">Last Name: </label>
+                    <input type="text" class="form-control" id="last_name" name="ninja_lname">
+                    <label for="City" class="form-label">Power: </label>
+                    <input type="text" class="form-control" id="ninja_pwoer" name="ninja_power">
+                    <label for="dojo" class="form-label text-light">Dojo: </label>
+                    <select class="form-select" aria-label="Default select example" name="dojo_id" required>
+                        <option selected>Select a Dojo</option>
+                        {% for dojo in dojos %}
+                            <option value="{{dojo.id}}">{{dojo.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-dark mt-2">Add Ninja</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col 4">
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row text-center">
+            <h4>All the Dojos</h4>
+            {% for dojo in dojos %}
+                <h5>Ninjas at the {{dojo.name}}</h5>
+                {% for ninja in dojo.ninjas.all %}
+                    <li>{{ ninja.first_name }} {{ ninja.last_name }}</li>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        const data = {
+            labels: [{% for ninja in ninjas %} "{{ninja.first_name}}", {% endfor %}],
+            datasets: [{
+            label: 'Ninja Power',
+            backgroundColor: 'rgb(13,17,23)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [{% for ninja in ninjas %} {{ninja.power_force}}, {% endfor %}],
+            }]
+        }
+        const config = {
+            type: 'bar',
+            data,
+            options: {}
+        };
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    </script>
+</body>
+</html>

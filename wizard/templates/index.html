@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Wizards</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% load static %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2 class="mb-2">Wizards</h2>
+                <table>
+                    <tr class="me-1">
+                        <th>Name</th>
+                        <th>House</th>
+                        <th>Pet</th>
+                        <th>Year</th>
+                    </tr>
+                    {% for wizard in wizards %}
+                        <tr class="me-1">
+                            <td> {{wizard.name}} </td>
+                            <td> {{wizard.house}} </td>
+                            <td> {{wizard.pet}} </td>
+                            <td> {{wizard.year}} </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <form method="POST" action="{%url 'add_wizz'%}">
+            {% csrf_token %}
+            <div class="row mt-3">
+                <div class="col">
+                    <label for="FirstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="wizzfname">
+                </div>
+                <div class="col">
+                    <label for="LastName" class="form-label">House</label>
+                    <input type="text" class="form-control" id="house" name="wizzhouse">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="pet" class="form-label">Pet</label>
+                    <input type="text" class="form-control" id="pet" name="wizzpet">
+                </div>
+                <div class="col">
+                    <label for="exampleInputEmail1" class="form-label">Year</label>
+                    <input type="text" class="form-control" id="year" name="wizzyear">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark mt-2">Add wizard</button>
+        </form>
+    </div>
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>
